@@ -23,7 +23,7 @@
         $result = $conn->query($query);
         $row = $result->fetch_array();
         $_SESSION['login'] = $row['id'];
-        
+        header('location: home.php');
     }
     else{
         header('location: verify_email.php?msg=ee');

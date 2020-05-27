@@ -25,7 +25,7 @@
                 <form class="container" action="get_otp.php" method="post" onsubmit="return check()">
                     <?php if(isset($_GET['msg'])){ 
                         if($_GET['msg'] === 'nm'){ ?>
-                        <div class="alert alert-danger text-center" role="alert">One Time Password has not matched with which has sent on your Email...</div>
+                            <div class="alert alert-danger text-center" role="alert">One Time Password has not matched with which has sent on your Email...</div>
                         <?php } else if($_GET['msg'] === 'os'){ ?>
                             <div class="alert alert-success text-center" role="alert">OTP resent to your Email...</div>
                         <?php } else if($_GET['msg'] === 'ee'){ ?>
