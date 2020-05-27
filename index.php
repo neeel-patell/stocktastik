@@ -45,7 +45,8 @@
                         </div>
                         <div class="col-md-4"></div>
                         <div class="col-md-12 text-center">
-                            <button type="button" class="btn btn-link" onclick='location.href="forgot_password.php";'>Forgot Password?</button>
+                            <button type="button" class="btn btn-link p-1" onclick='location.href="forgot_password.php";'>Forgot Password?</button><br>
+                            <button type="button" class="btn btn-link p-1" onclick='location.href="verify_email.php";'>New User?</button>
                         </div>
                     </div>
                     <div class="form-group text-center mb-0">

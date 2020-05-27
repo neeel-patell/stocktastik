@@ -1,5 +1,6 @@
 <?php
     require 'connection.php';
+    session_start();
     $conn = getConn();
 
     $email = $_POST['email'];

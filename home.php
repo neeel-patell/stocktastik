@@ -7,7 +7,7 @@
 <!doctype html>
 <html lang="en">
     <head>
-        <title>Stocktastik - Login</title>
+        <title>Stocktastik</title>
         <?php include 'css_files.php'; ?>
     </head>
     <body>
