@@ -47,16 +47,6 @@
             <h5 class="text-white text-right"><i class="far fa-copyright"></i> Lampros Tech</h5>
             <h5 class="text-monospace text-xl-center text-white"> - By Neeel-Patell</h5>
         </footer>
-        <script type="text/javascript">
-            function showPass(chk,pass){
-                var chk = document.getElementById(chk);
-                if(chk.checked == true){
-                    document.getElementById(pass).setAttribute("type","text");
-                }
-                else{
-                    document.getElementById(pass).setAttribute("type","password");
-            }
-        </script>
         <?php include 'js_files.php' ?>
     </body>
 </html>
