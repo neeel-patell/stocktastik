@@ -69,7 +69,7 @@
                         </div>
                     </div>
                     <div class="form-group text-center mb-0">
-                        <input type="submit" value="Submit" class="btn btn-success" data-toggle="modal" data-target="#otpmodal">
+                        <input type="submit" value="Register Me" class="btn btn-success">
                     </div>
                 </form>
             </div>

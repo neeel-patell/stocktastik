@@ -7,7 +7,7 @@
 <!doctype html>
 <html lang="en">
     <head>
-        <title>Stocktastik - Login</title>
+        <title>Stocktastik - Forgot Password</title>
         <?php include 'css_files.php'; ?>
     </head>
     <body>
@@ -16,18 +16,14 @@
         </header>
         <div class="container-fluid purple-gradient p-5">
             <div class="container border-success card p-3">
-                <h3 class="text-center container-fluid">Login</h3>
+                <h3 class="text-center container-fluid">Forgot Password</h3>
                 <hr class="bg-dark mb-5">
-                <form class="container" action="login.php" method="post">
+                <form class="container" action="send_password.php" method="post">
                     <div class="form-group row mb-0">
                         <div class="col-md-4"></div>
                         <div class="col-md-4">
                             <?php if(isset($_GET['msg'])){ if($_GET['msg'] === 'noemail'){ ?>
                                 <div class="alert alert-danger text-center" role="alert">Email is not registered ...</div>
-                            <?php } else if($_GET['msg'] === 'wrongpass'){ ?>
-                                <div class="alert alert-danger text-center" role="alert">Wrong Password ...</div>
-                            <?php } else if($_GET['msg'] === 'pr'){ ?>
-                                <div class="alert alert-success text-center" role="alert">Password Reset Successful ...</div>
                             <?php }} ?>
                         </div>
                         <div class="col-md-4"></div>
@@ -37,19 +33,12 @@
                             <input type="email" class="form-control" placeholder="Email Address" name="email" id="email" maxlength="256" required>
                         </div>
                         <div class="col-md-4"></div>
-                        <div class="col-md-4"></div>
-                        <div class="col-md-4 mb-3">
-                            <label class="label">Password: <span class="text-danger">*</span></label>
-                            <input type="password" class="form-control" placeholder="Password" name="password" id="pass" minlength="8" maxlength="24" id="password" required>
-                            <label class="ml-4 mt-1 form-check-label"><input type="checkbox" tabindex="-1" name="chkpass" id="chkpass" onchange='showPass("chkpass","pass")' class="form-check-input">Show Password</label>
-                        </div>
-                        <div class="col-md-4"></div>
-                        <div class="col-md-12 text-center">
-                            <button type="button" class="btn btn-link" onclick='location.href="forgot_password.php";'>Forgot Password?</button>
-                        </div>
                     </div>
                     <div class="form-group text-center mb-0">
-                        <input type="submit" value="Login" class="btn btn-success">
+                        <input type="submit" value="Get Password" class="btn btn-success">
+                    </div>
+                    <div class="form-group text-center mb-0">
+                        <input type="button" value="Back to Login Page" class="btn btn-danger" onclick='location.href="index.php"'>
                     </div>
                 </form>
             </div>
@@ -66,9 +55,9 @@
                 }
                 else{
                     document.getElementById(pass).setAttribute("type","password");
-                }
             }
         </script>
         <?php include 'js_files.php' ?>
     </body>
 </html>
+                }
