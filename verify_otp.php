@@ -2,17 +2,30 @@
     session_start();
     $otp = $_POST['otp'];
     $otpsent = $_SESSION['otp'];
-    if($otp == $otpsent){
+    $otptime = $_SESSION['otptime'];
+    $time = new DateTime(date("Y-m-d H:i:s"));
+    $diff = $otptime->diff($time);
+    $min = $diff->i;
+    if(isset($_SESSION['counter'])){
+        $counter = $_SESSION['counter'] + 1;
+    }
+    else{
+        $counter = 1;
+    }
+    if($otp == $otpsent && $min <= 30 && $min >= 0 && $counter <= 5){
         $_SESSION['otpverify'] = 1;
         header("location: registration.php");
     }
     else{
-        if(isset($_SESSION['counter'])){
-            $_SESSION['counter'] = $_SESSION['counter'] + 1;
+        if($min > 30 || $min < 0){
+            header("location: verify_email.php?msg=te");
+        }
+        else if($counter > 5){
+            header("location: verify_email.php?msg=mt");
         }
         else{
-            $_SESSION['counter'] = 1;
+            header("location: verify_email.php?msg=nm");
         }
-        header("location: verify_email.php?msg=nm");
+        
     }
 ?>

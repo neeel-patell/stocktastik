@@ -9,6 +9,7 @@
         $mobile = $_SESSION['mobile'];
         unset($_SESSION['otp']);
         unset($_SESSION['counter']);
+        unset($_SESSION['otptime']);
     }
 ?>
 <!doctype html>
@@ -70,6 +71,7 @@
                     </div>
                     <div class="form-group text-center mb-0">
                         <input type="submit" value="Register Me" class="btn btn-success">
+                        <input type="button" value="Back" class="btn btn-danger" onclick='location.href="reset_otp.php"'>
                     </div>
                 </form>
             </div>
