@@ -7,12 +7,14 @@
     $diff = $otptime->diff($time);
     $min = $diff->i;
     if(isset($_SESSION['counter'])){
-        $counter = $_SESSION['counter'] + 1;
+        $counter = $_SESSION['counter'] ;
+        $counter++;
     }
     else{
         $counter = 1;
     }
-    if($otp == $otpsent && $min <= 30 && $min >= 0 && $counter <= 5){
+    $_SESSION['counter'] = $counter;
+    if($otp == $otpsent && $min <= 30 && $min >= 0 && $counter < 5){
         $_SESSION['otpverify'] = 1;
         header("location: registration.php");
     }
@@ -20,12 +22,11 @@
         if($min > 30 || $min < 0){
             header("location: verify_email.php?msg=te");
         }
-        else if($counter > 5){
+        else if($counter >= 5){
             header("location: verify_email.php?msg=mt");
         }
         else{
             header("location: verify_email.php?msg=nm");
         }
-        
     }
 ?>
