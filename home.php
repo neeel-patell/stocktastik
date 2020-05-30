@@ -15,6 +15,6 @@
             <h5 class="text-white text-right"><i class="far fa-copyright"></i> Lampros Tech</h5>
             <h5 class="text-monospace text-xl-center text-white"> - By Neeel-Patell</h5>
         </footer>
-        <?php include 'js_files.php' ?>
+        <?php include 'js_files.php'; ?>
     </body>
 </html>

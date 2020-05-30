@@ -121,6 +121,6 @@
                 }
             }
         </script>
-        <?php include 'js_files.php' ?>
+        <?php include 'js_files.php'; ?>
     </body>
 </html>
