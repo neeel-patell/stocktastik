@@ -61,7 +61,7 @@
                     <?php if($otp == 0){ ?>
                     <div class="form-group text-center mb-0">
                         <input type="submit" value="Get OTP" class="btn btn-success">
-                        <input type="button" value="Back" class="btn btn-danger" onclick='location.href="index.php"'>
+                        <input type="button" value="Back" class="btn btn-danger" onclick='location.href="user_login.php"'>
                     </div>
                     <?php } ?>
 
@@ -89,7 +89,6 @@
         </div>
         <footer class="jumbotron p-5 blue darken-2 p-3 mb-0">
             <h5 class="text-white text-right"><i class="far fa-copyright"></i> Lampros Tech</h5>
-            <h5 class="text-monospace text-xl-center text-white"> - By Neeel-Patell</h5>
         </footer>
         <script type="text/javascript">
             function check(){

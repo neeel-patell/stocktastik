@@ -2,7 +2,7 @@
     session_start();
     if(!isset($_SESSION['email']) || !isset($_SESSION['mobile'])){
         session_unset();
-        header('location: verify_email.php');
+       //header('location: verify_email.php');
     }
     else{
         $email = $_SESSION['email'];
@@ -59,6 +59,15 @@
                     </div>
                     <div class="form-group row mb-0">
                         <div class="col-md-6 mb-3">
+                            <label class="label">Bank Balance:  <span class="text-danger">*</span></label>
+                            <div class="clearfix">
+                                <input type="text" class="form-control w-50 float-left" placeholder="Rupees" name="bank_rupees" id="bank_rupees" min="1" max="9999999" required>
+                                <input type="text" class="form-control w-50 float-right" placeholder="Paisa" name="bank_paisa" id="bank_paisa" min="0" max="99" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row mb-0">
+                        <div class="col-md-6 mb-3">
                             <label class="label">Password: <span class="text-danger">*</span></label>
                             <input type="password" class="form-control" placeholder="Password" name="password" id="pass" minlength="8" maxlength="24" id="password" required>
                             <label class="ml-4 mt-3 form-check-label"><input type="checkbox" tabindex="-1" name="chkpass" id="chkpass" onchange='showPass("chkpass","pass")' class="form-check-input">Show Password</label>
@@ -78,7 +87,6 @@
         </div>
         <footer class="jumbotron blue darken-2 p-5 mb-0">
             <h5 class="text-white text-right"><i class="far fa-copyright"></i> Lampros Tech</h5>
-            <h5 class="text-monospace text-xl-center text-white"> - By Neeel-Patell</h5>
         </footer>
         <script type="text/javascript">
             var maxdate = new Date();

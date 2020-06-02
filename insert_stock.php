@@ -7,8 +7,11 @@
     $name = $_POST['name'];
     $price = $_POST['rupees'].".".$_POST['paisa'];
     $quantity = $_POST['quantity'];
-    $total = $price*$quantity;
-
+    $date = date('Y-m-d',strtotime($_POST['stock_date']));
+    $time = date('H:i:s',strtotime($_POST['stock_time']));
+    $rule = $_POST['rule'];
+    $total = $price * $quantity;
+    
     $query = "select bank_balance,stock_balance from login where id=$login";
     $result = $conn->query($query);
     $row = $result->fetch_array();
@@ -16,20 +19,19 @@
     $stock = $row['stock_balance'];
 
     if($total > $bank){
-        header("location: add_stock.php?msg=nobal");
+        header("location: journal.php?msg=nobal");
     }
-
     else{
-        $query = "insert into stock(name,price,quantity,method,user_id) values('$name',$price,$quantity,0,$login)";
+        $query = "insert into journal(name,price,quantity,date,time,rule_follow,user_id) values('$name',$price,$quantity,'$date','$time',$rule,$login)";
         if($conn->query($query) == true){
             $bank = $bank - $total;
             $stock = $stock + $total;
             $query = "UPDATE login set bank_balance=$bank, stock_balance=$stock where id=$login";
-            if($conn->query($query))
-                header("location: add_stock.php?msg=added");
+            $conn->query($query);
+            header("location: journal.php?msg=added");
         }
         else{
-            header("location: add_stock.php?msg=notadded");
+            header("location: journal.php?msg=notadded");
         }
     }
 

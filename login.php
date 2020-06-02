@@ -12,15 +12,15 @@
     if(mysqli_num_rows($result) != 0){
         $row = $result->fetch_array();
         $_SESSION['login'] = $row['id'];
-        header("location: home.php");
+        header("location: index.php");
     }
     else{
         $result = $conn->query("select id from login where email = '$email'");
         if(mysqli_num_rows($result) == 0){
-            header("location: index.php?msg=noemail");
+            header("location: user_login.php?msg=noemail");
         }
         else{
-            header("location: index.php?msg=wrongpass");
+            header("location: user_login.php?msg=wrongpass");
         }
     }
 ?>

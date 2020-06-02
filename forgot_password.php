@@ -38,14 +38,13 @@
                         <input type="submit" value="Get Password" class="btn btn-success">
                     </div>
                     <div class="form-group text-center mb-0">
-                        <input type="button" value="Back to Login Page" class="btn btn-danger" onclick='location.href="index.php"'>
+                        <input type="button" value="Back to Login Page" class="btn btn-danger" onclick='location.href="user_login.php"'>
                     </div>
                 </form>
             </div>
         </div>
         <footer class="jumbotron blue darken-2 p-5 mb-0">
             <h5 class="text-white text-right"><i class="far fa-copyright"></i> Lampros Tech</h5>
-            <h5 class="text-monospace text-xl-center text-white"> - By Neeel-Patell</h5>
         </footer>
         <?php include 'js_files.php'; ?>
     </body>
