@@ -21,14 +21,22 @@
     $password = $_POST['password'];
     $password = hash('sha256',$password);
     
-    $query = "insert into login(first_name,last_name,email,mobile,dob,city,password,bank_balance) 
-            values('$first_name','$last_name','$email',$mobile,'$dob',$city,'$password',$bank)";
+    $query = "insert into login(first_name,last_name,email,mobile,dob,city,password) 
+            values('$first_name','$last_name','$email',$mobile,'$dob',$city,'$password')";
 
     if($conn->query($query) == true){
         $query = "select id from login where mobile=$mobile";
         $result = $conn->query($query);
         $row = $result->fetch_array();
-        $_SESSION['login'] = $row['id'];
+        $user_id = $row['id'];
+        $query = "insert into passbook(amount,method,user_id) values($bank,0,$user_id)";
+        if($conn->query($query) == false){
+            $conn->query("delete from login where id=$user_id");
+            $_SESSION['email'] = $email;
+            $_SESSION['mobile'] = $mobile;
+            header('location: registration.php?noreg');
+        }
+        $_SESSION['login'] = $user_id;
         header('location: index.php');
     }
     else{

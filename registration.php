@@ -31,6 +31,15 @@
                 <hr class="bg-dark mb-5">
                 <form class="container" action="add_user.php" method="post" onsubmit="return check()">
                     <div class="form-group row mb-0">
+                        <div class="col-md-4"></div>
+                        <div class="col-md-4">
+                            <?php if(isset($_GET['noreg'])){ ?>
+                            <div class="alert alert-danger" role="alert">Please Register Again... Some Error Occured...</div>
+                            <?php } ?>
+                        </div>
+                        <div class="col-md-4"></div>
+                    </div>
+                    <div class="form-group row mb-0">
                         <div class="col-md-6 mb-3">
                             <label class="label">First Name:  <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" placeholder="First Name" name="first_name" id="first_name" maxlength="30" required autofocus>
@@ -61,7 +70,7 @@
                             
                             <datalist id="city_list">
                             <?php while($row = $city->fetch_array()){ ?>
-                            <option value="<?php echo $row['name'].'-'.$row['state'];; ?>"><?php echo $row['name'].' - '.$row['state']; ?></option>
+                            <option value="<?php echo $row['name'].'-'.$row['state']; ?>"><?php echo $row['name'].' - '.$row['state']; ?></option>
                             <?php } ?>
                             
                             </datalist>
