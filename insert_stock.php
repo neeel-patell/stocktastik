@@ -12,23 +12,24 @@
     $rule = $_POST['rule'];
     $total = $price * $quantity;
     
-    $query = "select bank_balance,stock_balance from login where id=$login";
+    $query = "select sum(amount)'diposite' from passbook where user_id=$login and method=0";
     $result = $conn->query($query);
-    $row = $result->fetch_array();
-    $bank = $row['bank_balance'];
-    $stock = $row['stock_balance'];
+    $bank = $result->fetch_array();
+    $query = "select sum(amount)'balance' from passbook where user_id=$login and method=1";
+    $result = $conn->query($query);
+    $stock = $result->fetch_array();
+    $bank = $bank['diposite'] - $stock['balance'];
+    echo $bank;
 
     if($total > $bank){
         header("location: journal.php?msg=nobal");
     }
     else{
-        $query = "insert into journal(name,price,quantity,date,time,rule_follow,user_id) values('$name',$price,$quantity,'$date','$time',$rule,$login)";
-        if($conn->query($query) == true){
-            $bank = $bank - $total;
-            $stock = $stock + $total;
-            $query = "UPDATE login set bank_balance=$bank, stock_balance=$stock where id=$login";
-            $conn->query($query);
+        $query = "insert into journal(name,price,quantity,date,time,rule_follow,user_id) values('$name',$price,$quantity,'$date','$time',$rule,$login);
+                  insert into passbook(amount,method,user_id) values($total,1,$login)";
+        if($conn->multi_query($query) == true){
             header("location: journal.php?msg=added");
+            echo "Added";
         }
         else{
             header("location: journal.php?msg=notadded");

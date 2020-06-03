@@ -82,6 +82,7 @@
                         <td class="h5 w-25">Stock Name</td>
                         <td class="h5">Quantity</td>
                         <td class="h5">Entry Price</td>
+                        <td class="h5">Total Entry Price</td>
                         <td class="h5">Rule Follow</td>
                         <td class="h5">Description</td>
                     </tr>
@@ -94,7 +95,8 @@
                             echo '<td class="border">'.date ("h:i A",strtotime($row['time'])).'</td>';
                             echo '<td class="border">'.$row['name'].'</td>';
                             echo '<td class="border">'.$row['quantity'].'</td>';
-                            echo '<td class="border">'.$row['price'].'</td>';
+                            echo '<td class="border">'.$row['price'].'&#8377;</td>';
+                            echo '<td class="border">'.($row['price']*$row['quantity']).'&#8377;</td>';
                             echo '<td class="border">';
                             if($row['rule_follow'] == 0) echo 'NO'; else echo "YES";
                             echo '</td>';
@@ -111,6 +113,7 @@
                         <td class="h5 w-25">Stock Name</td>
                         <td class="h5">Quantity</td>
                         <td class="h5">Entry Price</td>
+                        <td class="h5">Total Entry Price</td>
                         <td class="h5">Rule Follow</td>
                         <td class="h5">Description</td>
                     </tr>
