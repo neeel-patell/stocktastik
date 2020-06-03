@@ -64,6 +64,10 @@
                         </div>
                     </div>
                 </div>
+                <div class="container mt-3">
+                    <label class="label">Description:</label>
+                    <input class="form-control" type="text" name="description" id="description" placeholder="Description (Optional)" maxlength="100">
+                </div>
                 <div class="container text-center mt-3">
                     <input type="submit" class="btn btn-success" value="ADD">
                     <input type="button" class="btn btn-danger" onclick='location.href="journal.php"' value="Back">
