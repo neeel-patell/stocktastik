@@ -46,7 +46,7 @@
     <body>
         <?php include 'header.php'; ?>
         <h1 class="text-center mt-5">Your Journal</h1>
-        <a href="add_stock.php" class="h3 text-right link mr-5" style="display: block"><span class="border p-3"><i class="fas fa-plus"></i> Add Stock</span></a>
+        <a href="add_stock.php" class="h3 text-right link mt-3 mr-5" style="display: block"><span class="border p-3"><i class="fas fa-plus"></i> Add Stock</span></a>
         <div class="row text-center">
             <div class="col-4"></div>
             <div class="col-md-4">
@@ -91,7 +91,7 @@
                         while($row = $stock_data->fetch_array()){
                             echo '<tr>';
                             echo '<td class="border">'.date ("d-M-Y",strtotime($row['date'])).'</td>';
-                            echo '<td class="border">'.date ("H:i A",strtotime($row['time'])).'</td>';
+                            echo '<td class="border">'.date ("h:i A",strtotime($row['time'])).'</td>';
                             echo '<td class="border">'.$row['name'].'</td>';
                             echo '<td class="border">'.$row['quantity'].'</td>';
                             echo '<td class="border">'.$row['price'].'</td>';

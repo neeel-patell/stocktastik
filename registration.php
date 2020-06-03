@@ -1,8 +1,9 @@
 <?php
     session_start();
+    require 'connection.php';
     if(!isset($_SESSION['email']) || !isset($_SESSION['mobile'])){
         session_unset();
-       //header('location: verify_email.php');
+        header('location: verify_email.php');
     }
     else{
         $email = $_SESSION['email'];
@@ -11,6 +12,8 @@
         unset($_SESSION['counter']);
         unset($_SESSION['otptime']);
     }
+    $conn = getConn();
+    $city = $conn->query("select name,state from city");
 ?>
 <!doctype html>
 <html lang="en">
@@ -49,19 +52,26 @@
                     </div>
                     <div class="form-group row mb-0">
                         <div class="col-md-6 mb-3">
-                            <label class="label">Date of Birth: <span class="text-danger">*</span></label>
+                            <label class="label">Date of Birth(DD-MM-YYYY): <span class="text-danger">*</span></label>
                             <input type="date" class="form-control" placeholder="Birthday" name="dob" id="dob" required>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="label">City:  <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" placeholder="City" name="city" id="city" maxlength="30" required>
+                            <input list="city_list" class="form-control" placeholder="City" name="city" id="city" maxlength="30" required>
+                            
+                            <datalist id="city_list">
+                            <?php while($row = $city->fetch_array()){ ?>
+                            <option value="<?php echo $row['name'].'-'.$row['state'];; ?>"><?php echo $row['name'].' - '.$row['state']; ?></option>
+                            <?php } ?>
+                            
+                            </datalist>
                         </div>
                     </div>
                     <div class="form-group row mb-0">
                         <div class="col-md-6 mb-3">
                             <label class="label">Bank Balance:  <span class="text-danger">*</span></label>
                             <div class="clearfix">
-                                <input type="text" class="form-control w-50 float-left" placeholder="Rupees" name="bank_rupees" id="bank_rupees" min="1" max="9999999" required>
+                                <input type="text" class="form-control w-50 float-left" placeholder="Rupees" name="bank_rupees" id="bank_rupees" min="0" max="9999999" required>
                                 <input type="text" class="form-control w-50 float-right" placeholder="Paisa" name="bank_paisa" id="bank_paisa" min="0" max="99" required>
                             </div>
                         </div>
