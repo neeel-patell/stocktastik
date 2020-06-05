@@ -2,6 +2,7 @@
     include 'login_check.php';
     $msg = "";
     unset($_SESSION['stock']);
+    unset($_SESSION['view_stock']);
     if(isset($_GET['msg'])){
         $msg = $_GET['msg'];
     }
@@ -58,8 +59,8 @@
         <h1 class="text-center mt-5">Your Journal</h1>
         <a href="add_stock.php" class="h3 text-right link mt-3 mr-5" style="display: block"><span class="border p-3"><i class="fas fa-plus"></i> Add Stock</span></a>
         <div class="row pl-5 pr-5 mt-3">
-            <p class="col-md-6 text-right mt-3"><span class="text-primary bg-warning border rounded p-3 border-success h5 text-monospace">Bank Balance : <?php echo $bank_balance; ?></span></p>
-            <p class="col-md-6 mt-3"><span class="text-danger bg-warning border rounded p-3 border-success h5 text-monospace">Stock Balance : <?php echo $stock_balance; ?></span></p>
+            <p class="col-md-6 text-center mt-4"><span class="text-primary bg-warning border rounded p-3 border-success h5 text-monospace">Bank Balance : <?php echo $bank_balance; ?></span></p>
+            <p class="col-md-6 text-center mt-4"><span class="text-danger bg-warning border rounded p-3 border-success h5 text-monospace">Stock Balance : <?php echo $stock_balance; ?></span></p>
         </div>
         <div class="row text-center">
             <div class="col-4"></div>
@@ -78,7 +79,7 @@
             </div>
             <div class="col-4"></div>
         </div>
-        <div class="table-responsive mt-3 p-5 text-center">
+        <div class="table-responsive p-5 text-center">
             <div class="clearfix">
                 <div class="float-left w-25">
                     <select class="custom-select mr-sm-2 form-control" id="limit" onchange='location.href="journal.php?limit="+document.getElementById("limit").value+"&page=<?php echo $page; ?>&search=<?php echo $search; ?>"'>
@@ -115,21 +116,26 @@
                             $minus_quantity = $result->fetch_array();
                             $minus_quantity = $minus_quantity['quantity'];
                             $available_quantity = $row['quantity']-$minus_quantity;
-                            echo '<tr>';
-                            echo '<td class="border">'.date ("d-M-Y",strtotime($row['date'])).'</td>';
-                            echo '<td class="border">'.date ("h:i A",strtotime($row['time'])).'</td>';
-                            echo '<td class="border">'.$row['name'].'</td>';
-                            echo '<td class="border">'.$row['quantity'].'</td>';
-                            echo '<td class="border">'.$available_quantity.'</td>';
-                            echo '<td class="border">'.$row['price'].'&#8377;</td>';
-                            echo '<td class="border">'.($row['price']*$row['quantity']).'&#8377;</td>';
-                            echo '<td class="border">';
+                            $name = $row['name'];
+                            $query = "select name from company where symbol='$name'";
+                            $result = $conn->query($query);
+                            $name1 = $result->fetch_array();
+                            $name = "$name(".$name1['name'].")";
+                            echo '<tr class="text-nowrap">';
+                            echo '<td class="border p-2">'.date ("d-M-Y",strtotime($row['date'])).'</td>';
+                            echo '<td class="border p-2">'.date ("h:i A",strtotime($row['time'])).'</td>';
+                            echo '<td class="border p-2">'.$name.'</td>';
+                            echo '<td class="border p-2">'.$row['quantity'].'</td>';
+                            echo '<td class="border p-2">'.$available_quantity.'</td>';
+                            echo '<td class="border p-2">'.$row['price'].'&#8377;</td>';
+                            echo '<td class="border p-2">'.($row['price']*$row['quantity']).'&#8377;</td>';
+                            echo '<td class="border p-2">';
                             if($row['rule_follow'] == 0) echo 'NO'; else echo "YES";
                             echo '</td>';
-                            echo '<td class="border">'.$row['description'].'</td>'; ?>
-                            <td class="border">
+                            echo '<td class="border p-2">'.$row['description'].'</td>'; ?>
+                            <td class="border p-2">
                                 <?php if($available_quantity > 0) {  ?> <button class="btn btn-link p-0 m-0" onclick=location.href="sell_session.php?id="+<?php echo $row['id']; ?>>Sell</button> <br> <?php } ?>
-                                <?php if($minus_quantity > 0) {  ?> <button class="btn btn-link p-0 m-0" onclick=location.href="view_sold_session.php?id="+<?php echo $row['id']; ?>>View Sold</button> <?php } ?>
+                                <?php if($minus_quantity > 0) {  ?> <button class="btn btn-link p-0 m-0 text-nowrap" onclick=location.href="view_sold_session.php?id=<?php echo $row['id']; ?>">View Sold</button> <?php } ?>
                             </td>
                             <?php echo '</tr>';
                         }

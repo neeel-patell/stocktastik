@@ -9,11 +9,11 @@
     if(isset($_SESSION['login']) == true){
         if($row['user_id'] != $_SESSION['login']){
             unset($_SESSION['login']);
-            header('location: user_login.php');
+            header("location: user_login.php");
         }
         else{
-            $_SESSION['stock'] = $stock;
-            header('location: sell_stock.php');
+            $_SESSION['view_stock'] = $stock;
+            header('location: sold_stock.php');
         }
     }
     else{
