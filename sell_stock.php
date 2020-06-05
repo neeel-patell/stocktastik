@@ -1,30 +1,41 @@
 <?php
-    include 'login_check.php'; 
-    $company = $conn->query("select symbol,name from company");
+    include 'login_check.php';
+    $stock = 0;
+    if(isset($_SESSION['stock']) == true){
+        $stock = $_SESSION['stock'];
+    }
+    if(!($stock > 0)){
+        unset($_SESSION['stock']);
+        header("location: journal.php");
+    }
+    $query = "select name,quantity,price from journal where id=$stock";
+    $result = $conn->query($query);
+    $details = $result->fetch_array();
+    $query = "select sum(quantity)'quantity' from sold_stock where stock_id=$stock";
+    $result = $conn->query($query);
+    $minus_quantity = $result->fetch_array();
+    
+    $quantity = $details['quantity'] - $minus_quantity['quantity'];
+    
+    $query = "select name from company where symbol='".$details['name']."'";
+    $result = $conn->query($query);
+    $stock_name = $result->fetch_array();
 ?>
 <!doctype html>
 <html lang="en">
     <head>
-        <title>Stocktastik - Journal - Add Stock</title>
+        <title>Stocktastik - Journal - Sell Stock</title>
         <?php include 'css_files.php'; ?>
     </head>
     <body>
         <?php include 'header.php'; ?>
-        <div class="container-fluid row p-5">
+        <div class="container-fluid row p-2 mt-3 mb-3">
             <div class="col-md-3"></div>
-            <form class="col-md-6 card p-3 pl-5 pr-5" method="post" action="insert_stock.php">
-                <h3 class="text-center">Add Stock</h3>
+            <form class="col-md-6 card p-3 pl-5 pr-5" method="post" action="remove_stock.php">
+                <h3 class="text-center">Sell Stock</h3>
                 <hr class="bg-dark mb-3">
-                <div class="container mt-3 mb-3">
-                    <label class="label">Stock Name :<span class="text-danger">*</span></label>
-                    <input list="names" class="form-control" name="name" id="name">
-                    <datalist id="names">
-                        
-                        <?php while($row = $company->fetch_array()){ ?> 
-                        <option value="<?php echo $row['symbol']; ?>"><?php echo $row['name']; ?></option>
-                        <?php } ?>
-                    
-                    </datalist>
+                <div class="container mt-3">
+                    <h5>Name : <?php echo $details['name']." - ".$stock_name['name']; ?></h5>
                 </div>
                 <div class="container mt-3">
                     <div class="row">
@@ -39,7 +50,7 @@
                     </div>
                 </div>
                 <div class="container mt-3">
-                    <label class="label">Price (&#8377;):<span class="text-danger">*</span></label>
+                    <label class="label">Price (You bought at <?php echo $details['price']; ?>&#8377; / Stock):<span class="text-danger">*</span></label>
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <input class="form-control" type="number" name="rupees" id="rupees" placeholder="Rupees" min="1" max="9999999999" required>
@@ -52,8 +63,8 @@
                 <div class="container mt-3 mb-3">
                     <div class="row">
                         <div class="col-md-6">
-                            <label class="label">Quantity :<span class="text-danger">*</span></label>
-                            <input class="form-control" type="number" name="quantity" id="quantity" min="1" max="99999" placeholder="Enter quantity of stock you bought" required>
+                            <label class="label">Quantity(<?php echo "From $quantity" ?>) :<span class="text-danger">*</span></label>
+                            <input class="form-control" type="number" name="quantity" id="quantity" min="1" max="<?php echo $quantity; ?>" placeholder="Enter quantity of stock you bought" required>
                         </div>
                         <div class="col-md-6">
                             <label class="label">Rule Followed :<span class="text-danger"></span></label>
@@ -66,10 +77,10 @@
                 </div>
                 <div class="container mt-3">
                     <label class="label">Description:</label>
-                    <input class="form-control" type="text" name="description" id="description" placeholder="Description (Optional)" maxlength="100">
+                    <input class="form-control" type="text" name="description" id="description" placeholder="Description (Optional)" maxlength="75">
                 </div>
                 <div class="container text-center mt-3">
-                    <input type="submit" class="btn btn-success" value="ADD">
+                    <input type="submit" class="btn btn-success" value="Remove">
                     <input type="button" class="btn btn-danger" onclick='location.href="journal.php"' value="Back">
                 </div>
             </form>

@@ -1,6 +1,7 @@
 <?php
     include 'login_check.php';
     $msg = "";
+    unset($_SESSION['stock']);
     if(isset($_GET['msg'])){
         $msg = $_GET['msg'];
     }
@@ -23,7 +24,7 @@
     else{
         $page = 1;
     }
-    $query = "select name,`date`,`time`,quantity,price,rule_follow,description from journal where user_id=$login";
+    $query = "select id, name,`date`,`time`,quantity,price,rule_follow,description from journal where user_id=$login";
     if(!($search === "")){
         $search = strtolower($search);
         $query .= " AND lower(name) like ('%$search%')";
@@ -36,6 +37,15 @@
     if($page > $total_page){
         $page = $total_page;
     }
+    $query = "select sum(amount)'diposite' from passbook where user_id=$login and method=0";
+    $result = $conn->query($query);
+    $bank = $result->fetch_array();
+    $query = "select sum(amount)'balance' from passbook where user_id=$login and method=1";
+    $result = $conn->query($query);
+    $stock = $result->fetch_array();
+    $stock_balance = $stock['balance'];
+    $bank_balance = $bank['diposite'] - $stock_balance;
+    
 ?>
 <!doctype html>
 <html lang="en">
@@ -47,15 +57,23 @@
         <?php include 'header.php'; ?>
         <h1 class="text-center mt-5">Your Journal</h1>
         <a href="add_stock.php" class="h3 text-right link mt-3 mr-5" style="display: block"><span class="border p-3"><i class="fas fa-plus"></i> Add Stock</span></a>
+        <div class="row pl-5 pr-5 mt-3">
+            <p class="col-md-6 text-right mt-3"><span class="text-primary bg-warning border rounded p-3 border-success h5 text-monospace">Bank Balance : <?php echo $bank_balance; ?></span></p>
+            <p class="col-md-6 mt-3"><span class="text-danger bg-warning border rounded p-3 border-success h5 text-monospace">Stock Balance : <?php echo $stock_balance; ?></span></p>
+        </div>
         <div class="row text-center">
             <div class="col-4"></div>
-            <div class="col-md-4">
+            <div class="col-md-4 mt-3">
                 <?php if($msg === "nobal"){ ?>
                 <div class="alert alert-warning h5" role="alert">Not Enough balance in Bank Account...</div>
                 <?php } else if($msg === "added"){ ?>
                 <div class="alert alert-success h5" role="alert">Stock Added Successfully... </div>
                 <?php } else if($msg === "notadded"){ ?>
                 <div class="alert alert-warning h5" role="alert">Not Enough balance in Bank Account... </div>
+                <?php } else if($msg === "stocksold"){ ?>
+                <div class="alert alert-success h5" role="alert">Stock sold(Removed) Successfully... </div>
+                <?php } else if($msg === "stockfail"){ ?>
+                <div class="alert alert-warning h5" role="alert">Stock is not removed from account... </div>
                 <?php } ?>
             </div>
             <div class="col-4"></div>
@@ -77,45 +95,58 @@
                 <caption>List of Stocks</caption>
                 <thead class="bg-dark text-white">
                     <tr>
-                        <td class="h5">Date</td>
-                        <td class="h5">Time</td>
-                        <td class="h5 w-25">Stock Name</td>
-                        <td class="h5">Quantity</td>
-                        <td class="h5">Entry Price</td>
-                        <td class="h5">Total Entry Price</td>
-                        <td class="h5">Rule Follow</td>
-                        <td class="h5">Description</td>
+                        <td class="h6 p-2">Date</td>
+                        <td class="h6 p-2">Time</td>
+                        <td class="h6 p-2">Stock Name</td>
+                        <td class="h6 p-2">Quantity</td>
+                        <td class="h6 p-2">Currently Available</td>
+                        <td class="h6 p-2">Entry Price</td>
+                        <td class="h6 p-2">Total Entry Price</td>
+                        <td class="h6 p-2">Rule Follow</td>
+                        <td class="h6 p-2">Description</td>
+                        <td class="h6 p-2">Action</td>
                     </tr>
                 </thead>
                 <tbody>
                     <?php
                         while($row = $stock_data->fetch_array()){
+                            $query = "select sum(quantity)'quantity' from sold_stock where stock_id=".$row['id'];
+                            $result = $conn->query($query);
+                            $minus_quantity = $result->fetch_array();
+                            $minus_quantity = $minus_quantity['quantity'];
+                            $available_quantity = $row['quantity']-$minus_quantity;
                             echo '<tr>';
                             echo '<td class="border">'.date ("d-M-Y",strtotime($row['date'])).'</td>';
                             echo '<td class="border">'.date ("h:i A",strtotime($row['time'])).'</td>';
                             echo '<td class="border">'.$row['name'].'</td>';
                             echo '<td class="border">'.$row['quantity'].'</td>';
+                            echo '<td class="border">'.$available_quantity.'</td>';
                             echo '<td class="border">'.$row['price'].'&#8377;</td>';
                             echo '<td class="border">'.($row['price']*$row['quantity']).'&#8377;</td>';
                             echo '<td class="border">';
                             if($row['rule_follow'] == 0) echo 'NO'; else echo "YES";
                             echo '</td>';
                             echo '<td class="border">'.$row['description'].'</td>'; ?>
-                            <!-- <td class="border"><button class="btn btn-link p-2 m-0" onclick=location.href="sell_session.php?id="+<?php// echo $row['id']; ?>>Sell</button></td> -->
+                            <td class="border">
+                                <?php if($available_quantity > 0) {  ?> <button class="btn btn-link p-0 m-0" onclick=location.href="sell_session.php?id="+<?php echo $row['id']; ?>>Sell</button> <br> <?php } ?>
+                                <?php if($minus_quantity > 0) {  ?> <button class="btn btn-link p-0 m-0" onclick=location.href="view_sold_session.php?id="+<?php echo $row['id']; ?>>View Sold</button> <?php } ?>
+                            </td>
                             <?php echo '</tr>';
                         }
                     ?> 
                 </tbody>
                 <thead class="bg-dark text-white">
                     <tr>
-                        <td class="h5">Date</td>
-                        <td class="h5">Time</td>
-                        <td class="h5 w-25">Stock Name</td>
-                        <td class="h5">Quantity</td>
-                        <td class="h5">Entry Price</td>
-                        <td class="h5">Total Entry Price</td>
-                        <td class="h5">Rule Follow</td>
-                        <td class="h5">Description</td>
+                        <td class="h6 p-2">Date</td>
+                        <td class="h6 p-2">Time</td>
+                        <td class="h6 p-2">Stock Name</td>
+                        <td class="h6 p-2">Quantity</td>
+                        <td class="h6 p-2">Currently Available</td>
+                        <td class="h6 p-2">Entry Price</td>
+                        <td class="h6 p-2">Total Entry Price</td>
+                        <td class="h6 p-2">Rule Follow</td>
+                        <td class="h6 p-2">Description</td>
+                        <td class="h6 p-2">Action</td>
                     </tr>
                 </thead>
             </table>
