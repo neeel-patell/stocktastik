@@ -13,7 +13,7 @@
         unset($_SESSION['otptime']);
     }
     $conn = getConn();
-    $city = $conn->query("select name,state from city");
+    $city = $conn->query("select name,state_id from city");
 ?>
 <!doctype html>
 <html lang="en">
@@ -69,7 +69,12 @@
                             <input list="city_list" class="form-control" placeholder="City" name="city" id="city" maxlength="30" required>
                             
                             <datalist id="city_list">
-                            <?php while($row = $city->fetch_array()){ ?>
+                            <?php
+                                while($row = $city->fetch_array()){ 
+                                $state = $conn->query("select name from state where id=".$row['state_id']);
+                                $state = $state->fetch_array();
+                                $row['state'] = $state['name'];
+                            ?>
                             <option value="<?php echo $row['name'].'-'.$row['state']; ?>"><?php echo $row['name'].' - '.$row['state']; ?></option>
                             <?php } ?>
                             

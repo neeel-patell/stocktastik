@@ -11,7 +11,9 @@
     $dob = str_replace("/","-",$dob);
     $dob = date('Y-m-d',strtotime($dob));
     $city = explode("-",$_POST['city']);
-    $query = "select id from city where name='".$city[0]."' and state='".$city[1]."'";
+    $state = $conn->query("select id from state where name='".$city[1]."'");
+    $state = $state->fetch_array();
+    $query = "select id from city where name='".$city[0]."' and state_id=".$state['id'];
     $city = $conn->query($query);
     $city = $city->fetch_array();
     $city = $city['id'];

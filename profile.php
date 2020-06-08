@@ -5,13 +5,17 @@
         $msg = $_GET['msg'];
     }
     
-    $city = $conn->query("select name,state from city");
+    $city = $conn->query("select name,state_id from city");
     $query = "select first_name,last_name,email,city,dob,mobile from login where id=$login";
     $user = $conn->query($query);
     $user = $user->fetch_array();
-    $query = "select name,state from city where id=".$user['city'];
+    $query = "select name,state_id from city where id=".$user['city'];
     $result = $conn->query($query);
     $user_city = $result->fetch_array();
+    $state = $conn->query("select name from state where id=".$user_city['state_id']);
+    $state = $state->fetch_array();
+    $user_city['state'] = $state['name'];
+
     $query = "select sum(amount)'diposite' from passbook where user_id=$login and method=0";
     $result = $conn->query($query);
     $bank = $result->fetch_array();
@@ -67,7 +71,12 @@
                             <input list="city_list" disabled value="<?php echo $user_city['name'].'-'.$user_city['state']; ?>" class="form-control" name="city" id="city" required>
                             
                             <datalist id="city_list">
-                            <?php while($row = $city->fetch_array()){ ?>
+                            <?php 
+                                while($row = $city->fetch_array()){ 
+                                $state = $conn->query("select name from state where id=".$row['state_id']);
+                                $state = $state->fetch_array();
+                                $row['state'] = $state['name'];
+                            ?>
                             <option value="<?php echo $row['name'].'-'.$row['state']; ?>"><?php echo $row['name'].' - '.$row['state']; ?></option>
                             <?php } ?>
                             
