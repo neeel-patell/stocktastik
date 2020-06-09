@@ -59,8 +59,8 @@
         <h1 class="text-center mt-5">Your Journal</h1>
         <a href="add_stock.php" class="h3 text-right link mt-3 mr-5" style="display: block"><span class="border p-3"><i class="fas fa-plus"></i> Add Stock</span></a>
         <div class="row pl-5 pr-5 mt-3">
-            <p class="col-md-6 text-center mt-4"><span class="text-primary bg-warning border rounded p-3 border-success h5 text-monospace">Bank Balance : <?php echo $bank_balance; ?></span></p>
-            <p class="col-md-6 text-center mt-4"><span class="text-danger bg-warning border rounded p-3 border-success h5 text-monospace">Stock Balance : <?php echo $stock_balance; ?></span></p>
+            <p class="col-md-6 text-center mt-4"><span class="text-primary bg-warning border rounded p-3 border-success h5 text-monospace">Bank Balance : &#8377;<?php echo $bank_balance; ?></span></p>
+            <p class="col-md-6 text-center mt-4"><span class="text-danger bg-warning border rounded p-3 border-success h5 text-monospace">Stock Balance : &#8377;<?php echo $stock_balance; ?></span></p>
         </div>
         <div class="row text-center">
             <div class="col-4"></div>

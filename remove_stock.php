@@ -21,10 +21,11 @@
     $rule = $_POST['rule'];
     $description = $_POST['description'];
     $total = -($quantity * $price);
+    $timestamp = date('Y-m-d H:i:s',strtotime($date." ".$time));
     
     $query = "INSERT INTO sold_stock(stock_id,date,time,price,quantity,rule_follow,description) 
               values($stock,'$date','$time',$price,$quantity,$rule,'$description');
-              INSERT INTO passbook(amount,method,user_id) values($total,1,$login);";
+              INSERT INTO passbook(`date`,amount,method,user_id) values('$timestamp',$total,1,$login);";
 
     if($conn->multi_query($query)){
         header('location: journal.php?msg=stocksold');

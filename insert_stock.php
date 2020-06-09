@@ -20,16 +20,16 @@
     $result = $conn->query($query);
     $stock = $result->fetch_array();
     $bank = $bank['diposite'] - $stock['balance'];
+    $timestamp = date('Y-m-d H:i:s',strtotime($date." ".$time));
     
     if($total > $bank){
         header("location: journal.php?msg=nobal");
     }
     else{
         $query = "insert into journal(name,price,quantity,date,time,rule_follow,description,user_id) values('$name',$price,$quantity,'$date','$time',$rule,'$description',$login);
-                  insert into passbook(amount,method,user_id) values($total,1,$login)";
+                  insert into passbook(`date`,amount,method,user_id) values('$timestamp',$total,1,$login);";
         if($conn->multi_query($query) == true){
             header("location: journal.php?msg=added");
-            echo "Added";
         }
         else{
             header("location: journal.php?msg=notadded");
